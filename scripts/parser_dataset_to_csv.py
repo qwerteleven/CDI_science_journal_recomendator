@@ -1,12 +1,11 @@
 
 
-def write_file(f, features):
+def write_file(f, features, journal):
 
     for article in features:
-        f.write('¡'.join(article))
+        f.write(journal)
+        f.write(' '.join(article))
         f.write('\n')
-
-
 
 
 def parse_file(file):
@@ -21,8 +20,8 @@ def parse_file(file):
 
         words = line.split(' ')
 
-        if line.split('{')[0] == '@article':
-            article_features.append(line.split('{')[-1][:-2])
+        #if line.split('{')[0] == '@article':
+        #    article_features.append(line.split('{')[-1][:-2])
 
         if words[0] == 'title':
             process_line = line.split('{')[-1]
@@ -31,7 +30,7 @@ def parse_file(file):
         if words[0] == 'keywords':
             process_line = line.split('{')[-1]
             process_line = process_line[:-2].split(',')
-            article_features.append('='.join(process_line[:-1]))
+            article_features.append(''.join(process_line[:-1]))
 
         if words[0] == 'abstract':
             process_line = line.split('{')[-1][:-2]
@@ -51,9 +50,9 @@ def main(files):
 
     f = open('../dataset/features.csv', 'w', encoding="utf-8")
 
-    for file in files:
+    for index, file in enumerate(files):
         features = parse_file(file)
-        write_file(f, features)
+        write_file(f, features, str(index) + '¡')
 
     f.close()
 
